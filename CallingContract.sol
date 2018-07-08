@@ -2,6 +2,7 @@ pragma solidity ^0.4.17;
 
 import "./Ownable.sol";
 
+/** @title Calling Contract */
 contract CallingContract is Ownable {
     Call[] public calls;
 
@@ -25,6 +26,10 @@ contract CallingContract is Ownable {
     }
 
     function callIt(string _description) public payable returns (uint callID) {
+    /** @dev Registers a call.
+      * @param description Description of what event is called; should include timelimit.
+      * @return callID ID in calls[] of registered call.
+      */
         require(
             msg.value == callingFee,
             "Wrong calling fee"
