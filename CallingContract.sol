@@ -2,23 +2,23 @@ pragma solidity ^0.4.17;
 
 import "./Ownable.sol";
 
-// import "./SafeMath.sol";
-
+/** @title Calling Contract */
 contract CallingContract is Ownable {
     Call[] public calls;
 
-    // using SafeMath for uint;
+    uint public callingFee = 0.001 ether;
 
-    // ownership of contract asd
-
-    uint callingFee = 0.001 ether;
+    event SomeoneCalledIt(callID); // Event, needs to be invoked somewhere
 
     function withdraw() external onlyOwner {
         owner.transfer(this.balance);
     }
 
     function setCallingFee(uint _fee) external onlyOwner {
-        callingFee = _fee;
+    /** @dev Sets calling ffee.
+      * @param _callingFee New calling fee in ether.
+      */
+        callingFee = _fee * 1 ether;
     }
 
     // content
@@ -30,13 +30,20 @@ contract CallingContract is Ownable {
     }
 
     function callIt(string _description) public payable returns (uint callID) {
-        // require(msg.value == callingFee);
+    /** @dev Registers a call.
+      * @param description Description of what event is called; should include timelimit.
+      * @return callID ID in calls[] of registered call.
+      */
+        require(
+            msg.value == callingFee,
+            "Wrong calling fee"
+        );
 
-        callID = calls.length++;
-        Call storage call = calls[callID];
-        call.description = _description;
-        call.caller = msg.sender;
-        call.createdDate = now;
+        calls.push(Call({
+            description : _description,
+            caller : mgsg.sender,
+            createdAt : now,
+        }));
     }
 
 }
