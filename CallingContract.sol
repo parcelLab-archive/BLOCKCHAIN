@@ -13,7 +13,7 @@ contract CallingContract is Ownable {
     struct Call {
         string description;
         address caller;
-        uint createdDate;
+        uint createdAt;
         bool happened;
     }
 
@@ -46,11 +46,13 @@ contract CallingContract is Ownable {
             createdAt : now,
             happened : false
         }));
+
+        callID = calls.length-1;
     }
 
     function calledIt(uint _callID) public {
         require(
-            calls[_callID],
+            _callID < calls.length,
             "no such call"
         );
 
@@ -64,7 +66,7 @@ contract CallingContract is Ownable {
             "already called that"
         );
 
-        calls[_callID].happend = true;
+        calls[_callID].happened = true;
         emit CalledIt(_callID, calls[_callID].description);
     }
 
