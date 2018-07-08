@@ -11,7 +11,7 @@ contract CallingContract is Ownable {
 
     // ownership of contract asd
 
-    uint callingFee = 0.001 ether;
+    uint public callingFee = 0.001 ether;
 
     function withdraw() external onlyOwner {
         owner.transfer(this.balance);
