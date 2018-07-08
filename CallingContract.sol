@@ -4,30 +4,31 @@ import "./Ownable.sol";
 
 /** @title Calling Contract */
 contract CallingContract is Ownable {
-    Call[] public calls;
-
-    uint public callingFee = 0.001 ether;
-
-    event SomeoneCalledIt(callID); // Event, needs to be invoked somewhere
-
-    function withdraw() external onlyOwner {
-        owner.transfer(this.balance);
-    }
-
-    function setCallingFee(uint _fee) external onlyOwner {
-    /** @dev Sets calling ffee.
-      * @param _callingFee New calling fee in ether.
-      */
-        callingFee = _fee * 1 ether;
-    }
-
-    // content
     
+    Call[] public calls;
+    uint public callingFee = 0.001 ether; //calling fee in wei
+
+    event CalledIt(uint callID, string description); // Event, needs to be invoked somewhere
+
     struct Call {
         string description;
         address caller;
         uint createdDate;
+        bool happened;
     }
+
+    function withdraw() external onlyOwner {
+        owner.transfer(address(this).balance);
+    }
+
+    function setCallingFee(uint _fee) external onlyOwner {
+    /** @dev Sets calling fee.
+      * @param _callingFee New calling fee in ether.
+      */
+        callingFee = _fee * 1 ether;
+    }
+    
+    
 
     function callIt(string _description) public payable returns (uint callID) {
     /** @dev Registers a call.
@@ -35,15 +36,36 @@ contract CallingContract is Ownable {
       * @return callID ID in calls[] of registered call.
       */
         require(
-            msg.value == callingFee,
-            "Wrong calling fee"
+            msg.value < callingFee,
+            "Insufficient msg.value"
         );
 
         calls.push(Call({
             description : _description,
-            caller : mgsg.sender,
+            caller : msg.sender,
             createdAt : now,
+            happened : false
         }));
+    }
+
+    function calledIt(uint _callID) public {
+        require(
+            calls[_callID],
+            "no such call"
+        );
+
+        require(
+            calls[_callID].caller == msg.sender,
+            "not your call"
+        );
+
+        require(
+            !calls[_callID].happened,
+            "already called that"
+        );
+
+        calls[_callID].happend = true;
+        emit CalledIt(_callID, calls[_callID].description);
     }
 
 }
