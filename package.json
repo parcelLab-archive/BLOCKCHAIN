@@ -1,0 +1,40 @@
+{
+  "name": "called-it",
+  "version": "0.1.1",
+  "description": "Never argue about who called it ever again.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "parcel src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/parcelLab/BLOCKCHAIN.git"
+  },
+  "keywords": [
+    "blockchain",
+    "ether",
+    "Ethereum",
+    "called",
+    "it"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/parcelLab/BLOCKCHAIN/issues"
+  },
+  "homepage": "https://github.com/parcelLab/BLOCKCHAIN#readme",
+  "devDependencies": {
+    "eslint": "^5.0.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "parcel-bundler": "^1.9.4",
+    "parcel-plugin-riot": "^1.0.1"
+  },
+  "dependencies": {
+    "riot": "^3.10.3",
+    "web3": "^1.0.0-beta.34"
+  }
+}
