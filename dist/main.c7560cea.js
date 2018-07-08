@@ -1191,7 +1191,23 @@ module.exports = hyperx(nanoHtmlCreateElement, {comments: true})
 module.exports.default = module.exports
 module.exports.createElement = nanoHtmlCreateElement
 
-},{"hyperx":107,"./append-child":103,"./svg-tags":104,"./bool-props":105,"./direct-props":106}],113:[function(require,module,exports) {
+},{"hyperx":107,"./append-child":103,"./svg-tags":104,"./bool-props":105,"./direct-props":106}],30:[function(require,module,exports) {
+var _templateObject = _taggedTemplateLiteral(['\n  <nav class="navbar navbar-expand-md navbar-dark bg-dark">\n      <a class="navbar-brand" href="#">CALL IT</a>\n      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">\n        <span class="navbar-toggler-icon"></span>\n      </button>\n\n      <div class="collapse navbar-collapse" id="navbarsExampleDefault">\n        <ul class="navbar-nav mr-auto">\n          <!-- <li class="nav-item active">\n            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>\n          </li>\n          <li class="nav-item">\n            <a class="nav-link" href="#">Link</a>\n          </li>\n          <li class="nav-item">\n            <a class="nav-link disabled" href="#">Disabled</a>\n          </li> -->\n        </ul>\n        <form class="form-inline my-2 my-lg-0" onSubmit=', '>\n          <input class="form-control mr-sm-2" type="text" placeholder="Search Call ID" aria-label="Search" id="call-id-input">\n          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>\n        </form>\n      </div>\n    </nav>\n  '], ['\n  <nav class="navbar navbar-expand-md navbar-dark bg-dark">\n      <a class="navbar-brand" href="#">CALL IT</a>\n      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">\n        <span class="navbar-toggler-icon"></span>\n      </button>\n\n      <div class="collapse navbar-collapse" id="navbarsExampleDefault">\n        <ul class="navbar-nav mr-auto">\n          <!-- <li class="nav-item active">\n            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>\n          </li>\n          <li class="nav-item">\n            <a class="nav-link" href="#">Link</a>\n          </li>\n          <li class="nav-item">\n            <a class="nav-link disabled" href="#">Disabled</a>\n          </li> -->\n        </ul>\n        <form class="form-inline my-2 my-lg-0" onSubmit=', '>\n          <input class="form-control mr-sm-2" type="text" placeholder="Search Call ID" aria-label="Search" id="call-id-input">\n          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>\n        </form>\n      </div>\n    </nav>\n  ']);
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var html = require('nanohtml');
+
+module.exports = function (state, emit) {
+  var handleSubmit = function handleSubmit(evt) {
+    evt.preventDefault();
+    var input = document.querySelector('#call-id-input');
+    console.log(input.value);
+  };
+
+  return html(_templateObject, handleSubmit);
+};
+},{"nanohtml":101}],113:[function(require,module,exports) {
 var _templateObject = _taggedTemplateLiteral(['\n<div class="sk-cube-grid">\n<div class="sk-cube sk-cube1"></div>\n<div class="sk-cube sk-cube2"></div>\n<div class="sk-cube sk-cube3"></div>\n<div class="sk-cube sk-cube4"></div>\n<div class="sk-cube sk-cube5"></div>\n<div class="sk-cube sk-cube6"></div>\n<div class="sk-cube sk-cube7"></div>\n<div class="sk-cube sk-cube8"></div>\n<div class="sk-cube sk-cube9"></div>\n</div>'], ['\n<div class="sk-cube-grid">\n<div class="sk-cube sk-cube1"></div>\n<div class="sk-cube sk-cube2"></div>\n<div class="sk-cube sk-cube3"></div>\n<div class="sk-cube sk-cube4"></div>\n<div class="sk-cube sk-cube5"></div>\n<div class="sk-cube sk-cube6"></div>\n<div class="sk-cube sk-cube7"></div>\n<div class="sk-cube sk-cube8"></div>\n<div class="sk-cube sk-cube9"></div>\n</div>']);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
@@ -1203,20 +1219,21 @@ module.exports = function () {
 };
 },{"nanohtml":101}],97:[function(require,module,exports) {
 var _templateObject = _taggedTemplateLiteral(['\n    <div>\n      <div>Loading: ', '</div>\n      <div>callId: ', '</div>\n      <div>Current call: ', '</div>\n    </div>\n  '], ['\n    <div>\n      <div>Loading: ', '</div>\n      <div>callId: ', '</div>\n      <div>Current call: ', '</div>\n    </div>\n  ']),
-    _templateObject2 = _taggedTemplateLiteral(['\n    <main>\n      ', '\n    </main>\n  '], ['\n    <main>\n      ', '\n    </main>\n  ']);
+    _templateObject2 = _taggedTemplateLiteral(['\n    <main>\n      ', '\n      ', '\n    </main>\n  '], ['\n    <main>\n      ', '\n      ', '\n    </main>\n  ']);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 var html = require('nanohtml');
+var Navbar = require('./Navbar');
 var Splash = require('./Splash');
 
 module.exports = function (state, emit) {
   var appBody = null;
 
   if (state.loading) appBody = Splash();else appBody = html(_templateObject, state.loading, state.callId, state.currentCall ? state.currentCall[0] : 'na');
-  return html(_templateObject2, appBody);
+  return html(_templateObject2, Navbar(state, emit), appBody);
 };
-},{"nanohtml":101,"./Splash":113}],6:[function(require,module,exports) {
+},{"nanohtml":101,"./Navbar":30,"./Splash":113}],6:[function(require,module,exports) {
 var morph = require('nanomorph');
 var settings = require('./settings');
 var store = require('./store');

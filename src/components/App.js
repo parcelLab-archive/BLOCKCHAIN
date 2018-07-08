@@ -1,4 +1,5 @@
 const html = require('nanohtml')
+const Navbar = require('./Navbar')
 const Splash = require('./Splash')
 
 module.exports = (state, emit) => {
@@ -14,6 +15,7 @@ module.exports = (state, emit) => {
   `
   return html`
     <main>
+      ${Navbar(state, emit)}
       ${appBody}
     </main>
   `
