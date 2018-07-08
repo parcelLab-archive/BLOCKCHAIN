@@ -1,23 +1,24 @@
 const settings = require('./settings')
-let web3js = null
+const store = require('./store')
 
 if (typeof window.web3 !== 'undefined') {
-  web3js = new window.Web3(window.web3.currentProvider)
-  initialize(web3js)
+  initialize(new window.Web3(window.web3.currentProvider))
 } else {
-  // set the provider you want from Web3.providers
   initialize(null)
 }
 
-function initialize (web3js) {
-  window.calledItContract = web3js ? web3js.eth
-    .contract(settings.contractInterface).at(settings.calledItContractAddress) : null
-  window.fetchCalls = (id, cb) => new Promise((resolve, reject) => {
-    window.calledItContract.calls(id, (err, res) => {
-      if (err) reject(err)
-      else resolve(res)
-    })
-  })
+function initialize (web3interface) {
+  if (web3interface) {
+    window.web3interface = web3interface
+    window.calledItContract = web3interface.eth
+      .contract(settings.contractInterface).at(settings.calledItContractAddress)
 
-  console.log('🚀  mounting app...')
+    window.fetchCall = (id, cb) => new Promise((resolve, reject) => {
+      window.calledItContract.calls(id, (err, res) => {
+        if (err) reject(err)
+        else resolve(res)
+      })
+    })
+  } else store.set({ error: ' 🦊 You need to install MetaMask!' })
+  window.store = store // just debug things
 }

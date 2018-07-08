@@ -108,31 +108,168 @@ module.exports = {
   calledItContractAddress: '0x7e26024f100dbbc9781f14e2d4e5cba49a3f9081',
   contractInterface: [{ 'constant': false, 'inputs': [{ 'name': '_fee', 'type': 'uint256' }], 'name': 'setCallingFee', 'outputs': [], 'payable': false, 'stateMutability': 'nonpayable', 'type': 'function' }, { 'constant': false, 'inputs': [], 'name': 'withdraw', 'outputs': [], 'payable': false, 'stateMutability': 'nonpayable', 'type': 'function' }, { 'constant': false, 'inputs': [{ 'name': '_description', 'type': 'string' }], 'name': 'callIt', 'outputs': [{ 'name': 'callID', 'type': 'uint256' }], 'payable': true, 'stateMutability': 'payable', 'type': 'function' }, { 'constant': true, 'inputs': [], 'name': 'owner', 'outputs': [{ 'name': '', 'type': 'address' }], 'payable': false, 'stateMutability': 'view', 'type': 'function' }, { 'constant': true, 'inputs': [{ 'name': '', 'type': 'uint256' }], 'name': 'calls', 'outputs': [{ 'name': 'description', 'type': 'string' }, { 'name': 'caller', 'type': 'address' }, { 'name': 'createdDate', 'type': 'uint256' }], 'payable': false, 'stateMutability': 'view', 'type': 'function' }, { 'constant': false, 'inputs': [{ 'name': 'newOwner', 'type': 'address' }], 'name': 'transferOwnership', 'outputs': [], 'payable': false, 'stateMutability': 'nonpayable', 'type': 'function' }, { 'anonymous': false, 'inputs': [{ 'indexed': true, 'name': 'previousOwner', 'type': 'address' }, { 'indexed': true, 'name': 'newOwner', 'type': 'address' }], 'name': 'OwnershipTransferred', 'type': 'event' }]
 };
-},{}],6:[function(require,module,exports) {
+},{}],95:[function(require,module,exports) {
+function E () {
+  // Keep this empty so it's easier to inherit from
+  // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
+}
+
+E.prototype = {
+  on: function (name, callback, ctx) {
+    var e = this.e || (this.e = {});
+
+    (e[name] || (e[name] = [])).push({
+      fn: callback,
+      ctx: ctx
+    });
+
+    return this;
+  },
+
+  once: function (name, callback, ctx) {
+    var self = this;
+    function listener () {
+      self.off(name, listener);
+      callback.apply(ctx, arguments);
+    };
+
+    listener._ = callback
+    return this.on(name, listener, ctx);
+  },
+
+  emit: function (name) {
+    var data = [].slice.call(arguments, 1);
+    var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
+    var i = 0;
+    var len = evtArr.length;
+
+    for (i; i < len; i++) {
+      evtArr[i].fn.apply(evtArr[i].ctx, data);
+    }
+
+    return this;
+  },
+
+  off: function (name, callback) {
+    var e = this.e || (this.e = {});
+    var evts = e[name];
+    var liveEvents = [];
+
+    if (evts && callback) {
+      for (var i = 0, len = evts.length; i < len; i++) {
+        if (evts[i].fn !== callback && evts[i].fn._ !== callback)
+          liveEvents.push(evts[i]);
+      }
+    }
+
+    // Remove event from queue to prevent memory leak
+    // Suggested by https://github.com/lazd
+    // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
+
+    (liveEvents.length)
+      ? e[name] = liveEvents
+      : delete e[name];
+
+    return this;
+  }
+};
+
+module.exports = E;
+
+},{}],94:[function(require,module,exports) {
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var Emitter = require('tiny-emitter');
+
+function Store() {
+  var initial = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var bus = new Emitter();
+  var state = _extends({}, initial);
+
+  this.on = bus.on.bind(bus);
+  this.emit = bus.emit.bind(bus);
+
+  this.set = function (stateMod) {
+    state = _extends({}, state, stateMod);
+    this.emit('state:changed');
+  };
+
+  this.get = function () {
+    return state;
+  };
+
+  this.subscribe = function (fn) {
+    var _this = this;
+
+    this.on('state:changed', function () {
+      fn(_this.get());
+    });
+  };
+}
+
+module.exports = Store;
+
+
+},{"tiny-emitter":95}],93:[function(require,module,exports) {
+var Nanostore = require('nanostore');
+var store = new Nanostore({
+  loading: false,
+  callId: null,
+  currentCall: null,
+  error: null
+});
+
+store.on('fetchCall', function (newCallId) {
+  store.set({ loading: true });
+
+  window.fetchCall(newCallId).then(function (res) {
+    store.set({ callId: newCallId, currentCall: res, loading: false, error: null });
+  }).catch(function (err) {
+    console.log(err);
+    store.set({ loading: false, callId: newCallId, currentCall: [] });
+  });
+});
+
+store.on('callIt', function (text) {
+  store.set({ loading: true });
+  var txAmount = window.web3.toWei(0.001, 'ether');
+  var gasAmount = window.web3.toWei(0.0000000000005, 'ether');
+
+  window.calledItContract.callIt(text, { value: txAmount, gas: gasAmount }, function (err, res) {
+    if (err) store.set({ error: err, loading: false });else store.set({ callIt_success: true, loading: false });
+  });
+});
+
+module.exports = store;
+},{"nanostore":94}],6:[function(require,module,exports) {
 var settings = require('./settings');
-var web3js = null;
+var store = require('./store');
 
 if (typeof window.web3 !== 'undefined') {
-  web3js = new window.Web3(window.web3.currentProvider);
-  initialize(web3js);
+  initialize(new window.Web3(window.web3.currentProvider));
 } else {
-  // set the provider you want from Web3.providers
   initialize(null);
 }
 
-function initialize(web3js) {
-  window.calledItContract = web3js ? web3js.eth.contract(settings.contractInterface).at(settings.calledItContractAddress) : null;
-  window.fetchCalls = function (id, cb) {
-    return new Promise(function (resolve, reject) {
-      window.calledItContract.calls(id, function (err, res) {
-        if (err) reject(err);else resolve(res);
-      });
-    });
-  };
+function initialize(web3interface) {
+  if (web3interface) {
+    window.web3interface = web3interface;
+    window.calledItContract = web3interface.eth.contract(settings.contractInterface).at(settings.calledItContractAddress);
 
-  console.log('🚀  mounting app...');
+    window.fetchCall = function (id, cb) {
+      return new Promise(function (resolve, reject) {
+        window.calledItContract.calls(id, function (err, res) {
+          if (err) reject(err);else resolve(res);
+        });
+      });
+    };
+  } else store.set({ error: ' 🦊 You need to install MetaMask!' });
+  window.store = store; // just debug things
 }
-},{"./settings":10}],87:[function(require,module,exports) {
+},{"./settings":10,"./store":93}],92:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -302,5 +439,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[87,6], null)
+},{}]},{},[92,6], null)
 //# sourceMappingURL=/main.c7560cea.map
