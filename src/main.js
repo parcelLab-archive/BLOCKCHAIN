@@ -1,6 +1,3 @@
-const riot = require('riot')
-window.riot = riot
-require('./tags/App.tag')
 const settings = require('./settings')
 let web3js = null
 
@@ -23,6 +20,4 @@ function initialize (web3js) {
   })
 
   console.log('🚀  mounting app...')
-  console.log(riot)
-  riot.mount('*', { web3js })
 }

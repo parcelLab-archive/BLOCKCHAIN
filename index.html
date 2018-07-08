@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>CryptoZombies front-end</title>
+  <title>Called It frontend</title>
   <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script language="javascript" type="text/javascript" src="web3.js"></script>
   <script language="javascript" type="text/javascript" src="bin/CallingContract.abi"></script>
@@ -11,9 +11,28 @@
 
 <body>
 
-  <input id="whatCall" type="text" />
+  <div id="error" style="display: none;">Hey there! thanks for joining our little party. But you'll need <a href="https://metamask.io/">MetaMask</a> to continue from here.</div>
+  <div id="theapp">
 
-  <div id="allCalls"></div>
+    <input id="whatCall" type="text" />
+
+    <div id="allCalls"></div>
+
+    <hr />
+
+    <form id="callitform">
+
+      <label>What do you want to call?</label><br />
+
+      <input id="callitform_call" name="call" style="width: 400px;" type="text" placeholder="Called It will be blockchain's killer app" /><br />
+
+      <input style="width: 400px;" type="submit" />
+
+    </form>
+
+    <div id="formresult"></div>
+
+  </div>
 
   <script>
     var calledItContract;
@@ -31,14 +50,28 @@
 
         }
 
+        var id = $("#whatCall").val();
         getAllCalls(id, function (zero) {
 
-          var id = $("#whatCall").val();
           $('#allCalls').html(`Call: ${zero[0]}<br />Caller: ${zero[1]}<br />When: ${zero[2]}`);
 
         })
 
       }, 100);
+
+
+      $('#callitform').on('submit', function(e) {
+        e.preventDefault(); 
+        var whatToCall = $("#callitform_call").val();
+
+        var txAmount = web3.toWei(0.001, 'ether')
+        var gasAmount = web3.toWei(0.0000000000005, 'ether')
+
+        calledItContract.callIt(whatToCall, { value: txAmount, gas: gasAmount }, function (err, res)  {
+          $("#formresult").text(err ? err : res)
+        });
+        
+      })
     }
 
     function displayAllCalls(calls) {
@@ -59,8 +92,9 @@
       if (typeof web3 !== 'undefined') {
         web3js = new Web3(web3.currentProvider);
       } else {
-        // Handle the case where the user doesn't have Metamask installed
-        // Probably show them a message prompting them to install Metamask
+        $("#error").show();
+        $("#theapp").hide();
+        console.log('🦊  You need to install MetaMask')
       }
 
       startApp()
