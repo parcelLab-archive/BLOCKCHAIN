@@ -2,3 +2,4 @@ node_modules/*
 .vs
 .cache/*
 bin/*
+.DS_Store
