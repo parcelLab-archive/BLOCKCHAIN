@@ -7,14 +7,16 @@ contract CallingContract is Ownable {
     
     Call[] public calls;
     uint public callingFee = 0.001 ether; //calling fee in wei
+    mapping (address => uint[]) public callsByAddress;
 
     event CalledIt(uint callID, string description); // Event, needs to be invoked somewhere
+    event NewCall(uint callID, string description);
 
     struct Call {
         string description;
         address caller;
         uint createdAt;
-        bool happened;
+        bool happened; //whether the call was declared as happened by caller already; there is no real-world check for truth here
     }
 
     function withdraw() external onlyOwner {
@@ -36,7 +38,7 @@ contract CallingContract is Ownable {
       * @return callID ID in calls[] of registered call.
       */
         require(
-            msg.value < callingFee,
+            msg.value >= callingFee,
             "Insufficient msg.value"
         );
 
@@ -48,6 +50,8 @@ contract CallingContract is Ownable {
         }));
 
         callID = calls.length-1;
+        callsByAddress[msg.sender].push(callID);
+        emit NewCall(callID, _description);
     }
 
     function calledIt(uint _callID) public {
@@ -69,5 +73,4 @@ contract CallingContract is Ownable {
         calls[_callID].happened = true;
         emit CalledIt(_callID, calls[_callID].description);
     }
-
 }
