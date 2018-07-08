@@ -7,6 +7,7 @@ module.exports = {
             "imports": "always-multiline",
             "exports": "always-multiline",
             "functions": "never"
-        }]
+        }],
+        "arrow-body-style": 0,
     }
 };

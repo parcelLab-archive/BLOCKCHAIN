@@ -1,5 +1,7 @@
+const morph = require('nanomorph')
 const settings = require('./settings')
 const store = require('./store')
+const App = require('./components/App')
 
 if (typeof window.web3 !== 'undefined') {
   initialize(new window.Web3(window.web3.currentProvider))
@@ -20,5 +22,13 @@ function initialize (web3interface) {
       })
     })
   } else store.set({ error: ' 🦊 You need to install MetaMask!' })
-  window.store = store // just debug things
+  window.store = store
+
+  const app = App(store.get(), store.emit)
+  document.querySelector('#app-root').innerHTML = ''
+  document.querySelector('#app-root').appendChild(app)
+
+  store.subscribe((state) => {
+    morph(app, App(state, store.emit))
+  })
 }
