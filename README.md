@@ -16,9 +16,15 @@
 
 ## ✨ EXPERIENCE THE BLOCKCHAIN EXPERIENCE ✨
 
-See our contract on [etherscan.io](https://etherscan.io/address/0x7e26024f100dbbc9781f14e2d4e5cba49a3f9081) or check our page at [calledit.io](https://calledit.io).
+Check our page at [calledit.io](https://calledit.io).
 
 > Never argue about who called it ever again. Called It gives everyone a super secure and trustworthy way to prove what they called based on Blockchain Technology!
+
+### Contract
+
+[v8 (current) on etherscan.io](https://etherscan.io/address/0x79e830d37021d0f90a90be326f500e812e3123fa)
+
+[v1 on etherscan.io](https://etherscan.io/address/0x7e26024f100dbbc9781f14e2d4e5cba49a3f9081)
 
 ### How it works in 3 magical steps
 
