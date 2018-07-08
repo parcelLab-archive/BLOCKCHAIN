@@ -15,7 +15,10 @@ contract CallingContract is Ownable {
     }
 
     function setCallingFee(uint _fee) external onlyOwner {
-        callingFee = _fee;
+    /** @dev Sets calling ffee.
+      * @param _callingFee New calling fee in ether.
+      */
+        callingFee = _fee * 1 ether;
     }
 
     // content
