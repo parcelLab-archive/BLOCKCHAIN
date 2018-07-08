@@ -8,6 +8,8 @@ contract CallingContract is Ownable {
     Call[] public calls;
     uint public callingFee = 0.001 ether; //calling fee in wei
     mapping (address => uint[]) public callsByAddress;
+    uint public numberOfCalls = 0;
+    mapping (address => uint) public numberOfCallsByAddress;
 
     event CalledIt(uint callID, string description); // Event, needs to be invoked somewhere
     event NewCall(uint callID, string description);
@@ -50,7 +52,9 @@ contract CallingContract is Ownable {
         }));
 
         callID = calls.length-1;
+        numberOfCalls = calls.length;
         callsByAddress[msg.sender].push(callID);
+        numberOfCallsByAddress[msg.sender] = callsByAddress[msg.sender].length;
         emit NewCall(callID, _description);
     }
 

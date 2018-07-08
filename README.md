@@ -2,11 +2,11 @@
 
 ## Todos
 
-- [ ] Add amount of calls to Smart Contract (and probably other getters and setters)
+- [X] Add amount of calls to Smart Contract (and probably other getters and setters)
 
-- [ ] Mapping address ~> call ids 
+- [X] Mapping address ~> call ids 
 
-- [ ] Events that a new call has been called and a called call is actually called, like for realz
+- [X] Events that a new call has been called and a called call is actually called, like for realz
 
 - [ ] Limitations on number of calls per day per address (and maybe other limitations as well, but the good kind)
 
