@@ -9,5 +9,6 @@ module.exports = {
             "functions": "never"
         }],
         "arrow-body-style": 0,
+        "curly": 0,
     }
 };

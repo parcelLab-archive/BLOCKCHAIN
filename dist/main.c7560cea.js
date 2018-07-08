@@ -1191,19 +1191,32 @@ module.exports = hyperx(nanoHtmlCreateElement, {comments: true})
 module.exports.default = module.exports
 module.exports.createElement = nanoHtmlCreateElement
 
-},{"hyperx":107,"./append-child":103,"./svg-tags":104,"./bool-props":105,"./direct-props":106}],97:[function(require,module,exports) {
-var _templateObject = _taggedTemplateLiteral(['\n    <div>Current call: ', '</div>\n  '], ['\n    <div>Current call: ', '</div>\n  ']),
-    _templateObject2 = _taggedTemplateLiteral(['\n    <main>\n      <div>Loading: ', '</div>\n      <div>callId: ', '</div>\n      ', '\n    </main>\n  '], ['\n    <main>\n      <div>Loading: ', '</div>\n      <div>callId: ', '</div>\n      ', '\n    </main>\n  ']);
+},{"hyperx":107,"./append-child":103,"./svg-tags":104,"./bool-props":105,"./direct-props":106}],113:[function(require,module,exports) {
+var _templateObject = _taggedTemplateLiteral(['\n<div class="sk-cube-grid">\n<div class="sk-cube sk-cube1"></div>\n<div class="sk-cube sk-cube2"></div>\n<div class="sk-cube sk-cube3"></div>\n<div class="sk-cube sk-cube4"></div>\n<div class="sk-cube sk-cube5"></div>\n<div class="sk-cube sk-cube6"></div>\n<div class="sk-cube sk-cube7"></div>\n<div class="sk-cube sk-cube8"></div>\n<div class="sk-cube sk-cube9"></div>\n</div>'], ['\n<div class="sk-cube-grid">\n<div class="sk-cube sk-cube1"></div>\n<div class="sk-cube sk-cube2"></div>\n<div class="sk-cube sk-cube3"></div>\n<div class="sk-cube sk-cube4"></div>\n<div class="sk-cube sk-cube5"></div>\n<div class="sk-cube sk-cube6"></div>\n<div class="sk-cube sk-cube7"></div>\n<div class="sk-cube sk-cube8"></div>\n<div class="sk-cube sk-cube9"></div>\n</div>']);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 var html = require('nanohtml');
-module.exports = function (state, emit) {
-  var currentCall = state.currentCall ? html(_templateObject, state.currentCall[0]) : null;
 
-  return html(_templateObject2, state.loading, state.callId, currentCall);
+module.exports = function () {
+  return html(_templateObject);
 };
-},{"nanohtml":101}],6:[function(require,module,exports) {
+},{"nanohtml":101}],97:[function(require,module,exports) {
+var _templateObject = _taggedTemplateLiteral(['\n    <div>\n      <div>Loading: ', '</div>\n      <div>callId: ', '</div>\n      <div>Current call: ', '</div>\n    </div>\n  '], ['\n    <div>\n      <div>Loading: ', '</div>\n      <div>callId: ', '</div>\n      <div>Current call: ', '</div>\n    </div>\n  ']),
+    _templateObject2 = _taggedTemplateLiteral(['\n    <main>\n      ', '\n    </main>\n  '], ['\n    <main>\n      ', '\n    </main>\n  ']);
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var html = require('nanohtml');
+var Splash = require('./Splash');
+
+module.exports = function (state, emit) {
+  var appBody = null;
+
+  if (state.loading) appBody = Splash();else appBody = html(_templateObject, state.loading, state.callId, state.currentCall ? state.currentCall[0] : 'na');
+  return html(_templateObject2, appBody);
+};
+},{"nanohtml":101,"./Splash":113}],6:[function(require,module,exports) {
 var morph = require('nanomorph');
 var settings = require('./settings');
 var store = require('./store');
@@ -1227,7 +1240,7 @@ function initialize(web3interface) {
         });
       });
     };
-  } else store.set({ error: ' 🦊 You need to install MetaMask!' });
+  } else store.set({ error: '🦊 You need to install MetaMask!' });
   window.store = store;
 
   var app = App(store.get(), store.emit);
@@ -1238,7 +1251,7 @@ function initialize(web3interface) {
     morph(app, App(state, store.emit));
   });
 }
-},{"nanomorph":98,"./settings":10,"./store":93,"./components/App":97}],109:[function(require,module,exports) {
+},{"nanomorph":98,"./settings":10,"./store":93,"./components/App":97}],24:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -1267,7 +1280,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '60064' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '50479' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -1408,5 +1421,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[109,6], null)
+},{}]},{},[24,6], null)
 //# sourceMappingURL=/main.c7560cea.map

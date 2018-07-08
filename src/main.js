@@ -21,7 +21,7 @@ function initialize (web3interface) {
         else resolve(res)
       })
     })
-  } else store.set({ error: ' 🦊 You need to install MetaMask!' })
+  } else store.set({ error: '🦊 You need to install MetaMask!' })
   window.store = store
 
   const app = App(store.get(), store.emit)

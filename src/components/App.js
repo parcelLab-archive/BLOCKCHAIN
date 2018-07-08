@@ -1,14 +1,20 @@
 const html = require('nanohtml')
-module.exports = (state, emit) => {
-  const currentCall = state.currentCall ? html`
-    <div>Current call: ${state.currentCall[0]}</div>
-  ` : null
+const Splash = require('./Splash')
 
-  return html`
-    <main>
+module.exports = (state, emit) => {
+  let appBody = null
+
+  if (state.loading) appBody = Splash()
+  else appBody = html`
+    <div>
       <div>Loading: ${state.loading}</div>
       <div>callId: ${state.callId}</div>
-      ${currentCall}
+      <div>Current call: ${state.currentCall ? state.currentCall[0] : 'na'}</div>
+    </div>
+  `
+  return html`
+    <main>
+      ${appBody}
     </main>
   `
 }
