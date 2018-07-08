@@ -2,41 +2,72 @@ pragma solidity ^0.4.17;
 
 import "./Ownable.sol";
 
-// import "./SafeMath.sol";
-
+/** @title Calling Contract */
 contract CallingContract is Ownable {
-    Call[] public calls;
-
-    // using SafeMath for uint;
-
-    // ownership of contract asd
-
-    uint callingFee = 0.001 ether;
-
-    function withdraw() external onlyOwner {
-        owner.transfer(this.balance);
-    }
-
-    function setCallingFee(uint _fee) external onlyOwner {
-        callingFee = _fee;
-    }
-
-    // content
     
+    Call[] public calls;
+    uint public callingFee = 0.001 ether; //calling fee in wei
+
+    event CalledIt(uint callID, string description); // Event, needs to be invoked somewhere
+
     struct Call {
         string description;
         address caller;
-        uint createdDate;
+        uint createdAt;
+        bool happened;
     }
 
-    function callIt(string _description) public payable returns (uint callID) {
-        // require(msg.value == callingFee);
+    function withdraw() external onlyOwner {
+        owner.transfer(address(this).balance);
+    }
 
-        callID = calls.length++;
-        Call storage call = calls[callID];
-        call.description = _description;
-        call.caller = msg.sender;
-        call.createdDate = now;
+    function setCallingFee(uint _fee) external onlyOwner {
+    /** @dev Sets calling fee.
+      * @param _callingFee New calling fee in ether.
+      */
+        callingFee = _fee * 1 ether;
+    }
+    
+    
+
+    function callIt(string _description) public payable returns (uint callID) {
+    /** @dev Registers a call.
+      * @param description Description of what event is called; should include timelimit.
+      * @return callID ID in calls[] of registered call.
+      */
+        require(
+            msg.value < callingFee,
+            "Insufficient msg.value"
+        );
+
+        calls.push(Call({
+            description : _description,
+            caller : msg.sender,
+            createdAt : now,
+            happened : false
+        }));
+
+        callID = calls.length-1;
+    }
+
+    function calledIt(uint _callID) public {
+        require(
+            _callID < calls.length,
+            "no such call"
+        );
+
+        require(
+            calls[_callID].caller == msg.sender,
+            "not your call"
+        );
+
+        require(
+            !calls[_callID].happened,
+            "already called that"
+        );
+
+        calls[_callID].happened = true;
+        emit CalledIt(_callID, calls[_callID].description);
     }
 
 }
