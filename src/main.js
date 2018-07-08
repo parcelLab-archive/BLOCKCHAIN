@@ -1,3 +1,4 @@
+require('sweetalert')
 const morph = require('nanomorph')
 const settings = require('./settings')
 const store = require('./store')

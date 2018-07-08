@@ -15,7 +15,7 @@ store.on('fetchCall', (newCallId) => {
     })
     .catch(err => {
       console.log(err)
-      store.set({ loading: false, callId: newCallId, currentCall: [] })
+      store.set({ loading: false, callId: newCallId, currentCall: false })
     })
 })
 
@@ -25,13 +25,9 @@ store.on('callIt', (text) => {
   const gasAmount = window.web3.toWei(0.0000000000005, 'ether')
 
   window.calledItContract.callIt(text, { value: txAmount, gas: gasAmount }, (err, res) => {
-    if (err) store.set({ error: err, loading: false })
+    if (err) store.set({ error: err.message, loading: false })
     else store.set({ callIt_success: true, loading: false })
   })
-})
-
-store.on('openModal', () => {
-  console.log('open!!!')
 })
 
 module.exports = store

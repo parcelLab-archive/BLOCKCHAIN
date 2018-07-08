@@ -8,22 +8,22 @@ module.exports = (state, emit) => {
       const id = parseInt(input.value)
       emit('fetchCall', id)
     } else {
-      alert('Please enter a valid Callit ID!')
+      window.swal('Ohh', 'Please enter a valid Call ID!', 'warning')
     }
   }
 
   return html`
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">CALL IT</a>
+      <a class="navbar-brand" href="/">CALL IT</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#">Make a Call!</a>
-          </li>
+          </li> -->
         </ul>
         <form class="form-inline my-2 my-lg-0" onsubmit=${handleSubmit}>
           <input class="form-control mr-sm-2" type="text" placeholder="Search Call ID" aria-label="Search" id="call-id-input">
