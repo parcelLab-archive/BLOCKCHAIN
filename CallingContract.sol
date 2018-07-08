@@ -36,7 +36,7 @@ contract CallingContract is Ownable {
       * @return callID ID in calls[] of registered call.
       */
         require(
-            msg.value < callingFee,
+            msg.value >= callingFee,
             "Insufficient msg.value"
         );
 
