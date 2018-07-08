@@ -6,8 +6,9 @@ import "./Ownable.sol";
 contract CallingContract is Ownable {
     Call[] public calls;
 
-
     uint public callingFee = 0.001 ether;
+
+    event SomeoneCalledIt(callID); // Event, needs to be invoked somewhere
 
     function withdraw() external onlyOwner {
         owner.transfer(this.balance);
