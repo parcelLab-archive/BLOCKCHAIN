@@ -3,15 +3,24 @@ const settings = require('./settings')
 const store = require('./store')
 const App = require('./components/App')
 
-if (typeof window.web3 !== 'undefined') {
-  initialize(new window.Web3(window.web3.currentProvider))
-} else {
-  initialize(null)
+function checkForMetaMask (store) {
+  if (typeof window.web3 !== 'undefined') { // is web3 available?
+    if (window.web3.eth) {
+      return true
+    }
+  }
+
+  store.set({ error: 'Please make sure that you have MetaMask installed / up and running!' })
+  return false
 }
 
-function initialize (web3interface) {
-  if (web3interface) {
+;(function initialize () {
+  if (checkForMetaMask(store)) {
+    // setup all web3 functions
+    const web3interface = new window.Web3(window.web3.currentProvider)
+
     window.web3interface = web3interface
+
     window.calledItContract = web3interface.eth
       .contract(settings.contractInterface).at(settings.calledItContractAddress)
 
@@ -21,14 +30,18 @@ function initialize (web3interface) {
         else resolve(res)
       })
     })
-  } else store.set({ error: '🦊 You need to install MetaMask!' })
+  }
+
   window.store = store
 
+  // render app
   const app = App(store.get(), store.emit)
   document.querySelector('#app-root').innerHTML = ''
   document.querySelector('#app-root').appendChild(app)
 
+
+  // subscribe app to store
   store.subscribe((state) => {
     morph(app, App(state, store.emit))
   })
-}
+})()

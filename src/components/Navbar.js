@@ -4,7 +4,12 @@ module.exports = (state, emit) => {
   const handleSubmit = (evt) => {
     evt.preventDefault()
     const input = document.querySelector('#call-id-input')
-    console.log(input.value)
+    if (!isNaN(parseInt(input.value))) {
+      const id = parseInt(input.value)
+      emit('fetchCall', id)
+    } else {
+      alert('Please enter a valid Callit ID!')
+    }
   }
 
   return html`
@@ -16,19 +21,13 @@ module.exports = (state, emit) => {
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <!-- <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Make a Call!</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li> -->
         </ul>
-        <form class="form-inline my-2 my-lg-0" onSubmit=${handleSubmit}>
+        <form class="form-inline my-2 my-lg-0" onsubmit=${handleSubmit}>
           <input class="form-control mr-sm-2" type="text" placeholder="Search Call ID" aria-label="Search" id="call-id-input">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">search</button>
         </form>
       </div>
     </nav>

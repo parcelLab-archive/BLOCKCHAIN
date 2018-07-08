@@ -30,4 +30,8 @@ store.on('callIt', (text) => {
   })
 })
 
+store.on('openModal', () => {
+  console.log('open!!!')
+})
+
 module.exports = store

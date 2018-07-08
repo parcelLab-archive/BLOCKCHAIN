@@ -628,6 +628,10 @@ store.on('callIt', function (text) {
   });
 });
 
+store.on('openModal', function () {
+  console.log('open!!!');
+});
+
 module.exports = store;
 },{"nanostore":94}],108:[function(require,module,exports) {
 module.exports = attributeToProperty
@@ -1192,7 +1196,7 @@ module.exports.default = module.exports
 module.exports.createElement = nanoHtmlCreateElement
 
 },{"hyperx":107,"./append-child":103,"./svg-tags":104,"./bool-props":105,"./direct-props":106}],30:[function(require,module,exports) {
-var _templateObject = _taggedTemplateLiteral(['\n  <nav class="navbar navbar-expand-md navbar-dark bg-dark">\n      <a class="navbar-brand" href="#">CALL IT</a>\n      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">\n        <span class="navbar-toggler-icon"></span>\n      </button>\n\n      <div class="collapse navbar-collapse" id="navbarsExampleDefault">\n        <ul class="navbar-nav mr-auto">\n          <!-- <li class="nav-item active">\n            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>\n          </li>\n          <li class="nav-item">\n            <a class="nav-link" href="#">Link</a>\n          </li>\n          <li class="nav-item">\n            <a class="nav-link disabled" href="#">Disabled</a>\n          </li> -->\n        </ul>\n        <form class="form-inline my-2 my-lg-0" onSubmit=', '>\n          <input class="form-control mr-sm-2" type="text" placeholder="Search Call ID" aria-label="Search" id="call-id-input">\n          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>\n        </form>\n      </div>\n    </nav>\n  '], ['\n  <nav class="navbar navbar-expand-md navbar-dark bg-dark">\n      <a class="navbar-brand" href="#">CALL IT</a>\n      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">\n        <span class="navbar-toggler-icon"></span>\n      </button>\n\n      <div class="collapse navbar-collapse" id="navbarsExampleDefault">\n        <ul class="navbar-nav mr-auto">\n          <!-- <li class="nav-item active">\n            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>\n          </li>\n          <li class="nav-item">\n            <a class="nav-link" href="#">Link</a>\n          </li>\n          <li class="nav-item">\n            <a class="nav-link disabled" href="#">Disabled</a>\n          </li> -->\n        </ul>\n        <form class="form-inline my-2 my-lg-0" onSubmit=', '>\n          <input class="form-control mr-sm-2" type="text" placeholder="Search Call ID" aria-label="Search" id="call-id-input">\n          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>\n        </form>\n      </div>\n    </nav>\n  ']);
+var _templateObject = _taggedTemplateLiteral(['\n  <nav class="navbar navbar-expand-md navbar-dark bg-dark">\n      <a class="navbar-brand" href="#">CALL IT</a>\n      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">\n        <span class="navbar-toggler-icon"></span>\n      </button>\n\n      <div class="collapse navbar-collapse" id="navbarsExampleDefault">\n        <ul class="navbar-nav mr-auto">\n          <li class="nav-item">\n            <a class="nav-link" href="#">Make a Call!</a>\n          </li>\n        </ul>\n        <form class="form-inline my-2 my-lg-0" onsubmit=', '>\n          <input class="form-control mr-sm-2" type="text" placeholder="Search Call ID" aria-label="Search" id="call-id-input">\n          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">search</button>\n        </form>\n      </div>\n    </nav>\n  '], ['\n  <nav class="navbar navbar-expand-md navbar-dark bg-dark">\n      <a class="navbar-brand" href="#">CALL IT</a>\n      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">\n        <span class="navbar-toggler-icon"></span>\n      </button>\n\n      <div class="collapse navbar-collapse" id="navbarsExampleDefault">\n        <ul class="navbar-nav mr-auto">\n          <li class="nav-item">\n            <a class="nav-link" href="#">Make a Call!</a>\n          </li>\n        </ul>\n        <form class="form-inline my-2 my-lg-0" onsubmit=', '>\n          <input class="form-control mr-sm-2" type="text" placeholder="Search Call ID" aria-label="Search" id="call-id-input">\n          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">search</button>\n        </form>\n      </div>\n    </nav>\n  ']);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -1202,10 +1206,44 @@ module.exports = function (state, emit) {
   var handleSubmit = function handleSubmit(evt) {
     evt.preventDefault();
     var input = document.querySelector('#call-id-input');
-    console.log(input.value);
+    if (!isNaN(parseInt(input.value))) {
+      var id = parseInt(input.value);
+      emit('fetchCall', id);
+    } else {
+      alert('Please enter a valid Callit ID!');
+    }
   };
 
   return html(_templateObject, handleSubmit);
+};
+},{"nanohtml":101}],38:[function(require,module,exports) {
+var _templateObject = _taggedTemplateLiteral(['\n      <div class="jumbotron mt-3">\n        <h1>Welcome to calledit.io <span class="badge badge-secondary">beta</span></h1>\n        <p class="lead">You can start by searching for Call made or by creating your own Call in the blockchain of Ethereum!</p>\n        <hr>\n        <div class="row">\n          <div class="col-sm space-top space-bottom">\n            <form onsubmit=', '>\n              <div class="input-group mb-3">\n                <input type="text" class="form-control" placeholder="Search for a Call ID" aria-label="Recipient\'s username" aria-describedby="basic-addon2" id="call-id-input-xl">\n                <div class="input-group-append">\n                  <button class="btn btn-outline-secondary" type="submit">search</button>\n                </div>\n              </div>\n            </form>\n          </div>\n          <div class="col-sm space-top space-bottom">\n            <button type="button" class="btn btn-primary btn-block" onclick=', '>Create a Call in the blockchain</button>\n          </div>\n        </div>\n      </div>\n  '], ['\n      <div class="jumbotron mt-3">\n        <h1>Welcome to calledit.io <span class="badge badge-secondary">beta</span></h1>\n        <p class="lead">You can start by searching for Call made or by creating your own Call in the blockchain of Ethereum!</p>\n        <hr>\n        <div class="row">\n          <div class="col-sm space-top space-bottom">\n            <form onsubmit=', '>\n              <div class="input-group mb-3">\n                <input type="text" class="form-control" placeholder="Search for a Call ID" aria-label="Recipient\'s username" aria-describedby="basic-addon2" id="call-id-input-xl">\n                <div class="input-group-append">\n                  <button class="btn btn-outline-secondary" type="submit">search</button>\n                </div>\n              </div>\n            </form>\n          </div>\n          <div class="col-sm space-top space-bottom">\n            <button type="button" class="btn btn-primary btn-block" onclick=', '>Create a Call in the blockchain</button>\n          </div>\n        </div>\n      </div>\n  ']);
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var html = require('nanohtml');
+
+module.exports = function (state, emit) {
+  var handleSubmit = function handleSubmit(evt) {
+    evt.preventDefault();
+    var input = document.querySelector('#call-id-input-xl');
+    if (!isNaN(parseInt(input.value))) {
+      var id = parseInt(input.value);
+      emit('fetchCall', id);
+    } else {
+      alert('Please enter a valid Callit ID!');
+    }
+  };
+
+  var result = null;
+
+  if (state.callId) {} else {
+    result = html(_templateObject, handleSubmit, function (evt) {
+      return emit('openModal');
+    });
+  }
+
+  return result;
 };
 },{"nanohtml":101}],113:[function(require,module,exports) {
 var _templateObject = _taggedTemplateLiteral(['\n<div class="sk-cube-grid">\n<div class="sk-cube sk-cube1"></div>\n<div class="sk-cube sk-cube2"></div>\n<div class="sk-cube sk-cube3"></div>\n<div class="sk-cube sk-cube4"></div>\n<div class="sk-cube sk-cube5"></div>\n<div class="sk-cube sk-cube6"></div>\n<div class="sk-cube sk-cube7"></div>\n<div class="sk-cube sk-cube8"></div>\n<div class="sk-cube sk-cube9"></div>\n</div>'], ['\n<div class="sk-cube-grid">\n<div class="sk-cube sk-cube1"></div>\n<div class="sk-cube sk-cube2"></div>\n<div class="sk-cube sk-cube3"></div>\n<div class="sk-cube sk-cube4"></div>\n<div class="sk-cube sk-cube5"></div>\n<div class="sk-cube sk-cube6"></div>\n<div class="sk-cube sk-cube7"></div>\n<div class="sk-cube sk-cube8"></div>\n<div class="sk-cube sk-cube9"></div>\n</div>']);
@@ -1217,37 +1255,59 @@ var html = require('nanohtml');
 module.exports = function () {
   return html(_templateObject);
 };
+},{"nanohtml":101}],39:[function(require,module,exports) {
+var _templateObject = _taggedTemplateLiteral(['\n  <div class="container">\n    <div class="alert alert-danger">\n      ', '\n    </div>\n  </div>\n  '], ['\n  <div class="container">\n    <div class="alert alert-danger">\n      ', '\n    </div>\n  </div>\n  ']);
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var html = require('nanohtml');
+
+module.exports = function (errText) {
+  return html(_templateObject, errText);
+};
 },{"nanohtml":101}],97:[function(require,module,exports) {
-var _templateObject = _taggedTemplateLiteral(['\n    <div>\n      <div>Loading: ', '</div>\n      <div>callId: ', '</div>\n      <div>Current call: ', '</div>\n    </div>\n  '], ['\n    <div>\n      <div>Loading: ', '</div>\n      <div>callId: ', '</div>\n      <div>Current call: ', '</div>\n    </div>\n  ']),
-    _templateObject2 = _taggedTemplateLiteral(['\n    <main>\n      ', '\n      ', '\n    </main>\n  '], ['\n    <main>\n      ', '\n      ', '\n    </main>\n  ']);
+var _templateObject = _taggedTemplateLiteral(['\n    <main>\n      ', '\n      <div class="container" style="padding-top: 25px;">\n        ', '\n      </div>\n    </main>\n  '], ['\n    <main>\n      ', '\n      <div class="container" style="padding-top: 25px;">\n        ', '\n      </div>\n    </main>\n  ']);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 var html = require('nanohtml');
 var Navbar = require('./Navbar');
+var Callview = require('./Callview');
 var Splash = require('./Splash');
+var Alert = require('./Alert');
 
 module.exports = function (state, emit) {
   var appBody = null;
 
-  if (state.loading) appBody = Splash();else appBody = html(_templateObject, state.loading, state.callId, state.currentCall ? state.currentCall[0] : 'na');
-  return html(_templateObject2, Navbar(state, emit), appBody);
+  if (state.loading) appBody = Splash();else if (state.error) appBody = Alert(state.error);else appBody = Callview(state, emit);
+
+  return html(_templateObject, Navbar(state, emit), appBody);
 };
-},{"nanohtml":101,"./Navbar":30,"./Splash":113}],6:[function(require,module,exports) {
+},{"nanohtml":101,"./Navbar":30,"./Callview":38,"./Splash":113,"./Alert":39}],6:[function(require,module,exports) {
 var morph = require('nanomorph');
 var settings = require('./settings');
 var store = require('./store');
 var App = require('./components/App');
 
-if (typeof window.web3 !== 'undefined') {
-  initialize(new window.Web3(window.web3.currentProvider));
-} else {
-  initialize(null);
+function checkForMetaMask(store) {
+  if (typeof window.web3 !== 'undefined') {
+    // is web3 available?
+    if (window.web3.eth) {
+      return true;
+    }
+  }
+
+  store.set({ error: 'Please make sure that you have MetaMask installed / up and running!' });
+  return false;
 }
 
-function initialize(web3interface) {
-  if (web3interface) {
+;(function initialize() {
+  if (checkForMetaMask(store)) {
+    // setup all web3 functions
+    var web3interface = new window.Web3(window.web3.currentProvider);
+
     window.web3interface = web3interface;
+
     window.calledItContract = web3interface.eth.contract(settings.contractInterface).at(settings.calledItContractAddress);
 
     window.fetchCall = function (id, cb) {
@@ -1257,17 +1317,20 @@ function initialize(web3interface) {
         });
       });
     };
-  } else store.set({ error: '🦊 You need to install MetaMask!' });
+  }
+
   window.store = store;
 
+  // render app
   var app = App(store.get(), store.emit);
   document.querySelector('#app-root').innerHTML = '';
   document.querySelector('#app-root').appendChild(app);
 
+  // subscribe app to store
   store.subscribe(function (state) {
     morph(app, App(state, store.emit));
   });
-}
+})();
 },{"nanomorph":98,"./settings":10,"./store":93,"./components/App":97}],24:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

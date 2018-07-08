@@ -10,5 +10,7 @@ module.exports = {
         }],
         "arrow-body-style": 0,
         "curly": 0,
+        "no-multiple-empty-lines": 0,
+        "no-trailing-spaces": 0,
     }
 };
