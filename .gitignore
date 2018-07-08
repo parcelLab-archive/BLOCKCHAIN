@@ -1,6 +1,4 @@
-node_modules
+node_modules/*
 .vs
-bin
-bin/CallingContract.abi
-bin/CallingContract.bin
-bin/CallingContract.json
+.cache/*
+bin/*
